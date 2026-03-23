@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - SmartQuiz{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2 class="dashboard-title">Your Dashboard</h2>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-number">{{ stats.total_quizzes }}</span>
+            <span class="stat-label">Quizzes Taken</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">{{ stats.avg_score }}%</span>
+            <span class="stat-label">Average Score</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">{{ stats.best_score }}%</span>
+            <span class="stat-label">Best Score</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">{{ stats.total_correct }}/{{ stats.total_questions }}</span>
+            <span class="stat-label">Total Correct</span>
+        </div>
+    </div>
+
+    <div class="history-section">
+        <h3 class="history-title">Quiz History</h3>
+
+        {% if attempts %}
+        <div class="history-table-wrapper">
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Percentage</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attempt in attempts %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ attempt.taken_at.strftime('%b %d, %Y %I:%M %p') }}</td>
+                        <td>{{ attempt.score }} / {{ attempt.total }}</td>
+                        <td>
+                            <div class="mini-progress">
+                                <div class="mini-progress-fill mini-progress--{{ 'great' if attempt.percentage >= 80 else ('good' if attempt.percentage >= 50 else 'low') }}"
+                                     style="width: {{ attempt.percentage }}%"></div>
+                            </div>
+                            <span>{{ attempt.percentage }}%</span>
+                        </td>
+                        <td>
+                            {% if attempt.percentage >= 80 %}
+                                <span class="rating-badge rating--great">Excellent</span>
+                            {% elif attempt.percentage >= 50 %}
+                                <span class="rating-badge rating--good">Good</span>
+                            {% else %}
+                                <span class="rating-badge rating--low">Practice</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>No quiz attempts yet. <a href="{{ url_for('quiz.start_quiz') }}">Start your first quiz!</a></p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="dashboard-actions">
+        <a href="{{ url_for('quiz.start_quiz') }}" class="btn btn--primary btn--large">Take New Quiz</a>
+    </div>
+</div>
+{% endblock %}

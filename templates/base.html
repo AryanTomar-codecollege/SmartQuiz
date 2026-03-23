@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Smart Quiz with Adaptive Difficulty - Test your knowledge with questions that adapt to your skill level.">
+    <title>{% block title %}Smart Quiz{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('main.index') }}" class="nav-logo">
+                <span class="logo-icon">SQ</span> SmartQuiz
+            </a>
+            <div class="nav-links">
+                {% if session.get('user_id') %}
+                    <span class="nav-greeting">Hi, {{ session.get('username') }}</span>
+                    <a href="{{ url_for('quiz.start_quiz') }}" class="nav-link">Start Quiz</a>
+                    <a href="{{ url_for('dashboard.dashboard') }}" class="nav-link">Dashboard</a>
+                    <a href="{{ url_for('auth.logout') }}" class="nav-link nav-link--logout">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="nav-link">Login</a>
+                    <a href="{{ url_for('auth.signup') }}" class="nav-link nav-link--primary">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash flash--{{ category }}">
+                        {{ message }}
+                        <button class="flash-close" onclick="this.parentElement.remove()" aria-label="Close notification">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>Smart Quiz &copy; Made for smart people ❤ by Aryan Tomar</p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

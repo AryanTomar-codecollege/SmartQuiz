@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Quiz Result - SmartQuiz{% endblock %}
+
+{% block content %}
+<div class="result-container">
+    <div class="score-section">
+        <div class="score-circle score-circle--{{ 'great' if percentage >= 80 else ('good' if percentage >= 50 else 'low') }}">
+            <span class="score-number">{{ percentage }}%</span>
+            <span class="score-label">Score</span>
+        </div>
+        <h2 class="result-title">
+            {% if percentage >= 80 %}
+                Excellent work!
+            {% elif percentage >= 50 %}
+                Good job!
+            {% else %}
+                Keep practicing!
+            {% endif %}
+        </h2>
+        <p class="result-summary">You got <strong>{{ score }}</strong> out of <strong>{{ total }}</strong> questions correct.</p>
+    </div>
+
+    <div class="review-section">
+        <h3 class="review-title">Answer Review</h3>
+        {% for item in details %}
+        <div class="review-card review-card--{{ 'correct' if item.is_correct else 'wrong' }}">
+            <div class="review-header">
+                <span class="review-status">{{ 'Correct' if item.is_correct else 'Wrong' }}</span>
+                <span class="difficulty-badge difficulty--{{ item.difficulty }}">{{ item.difficulty | upper }}</span>
+            </div>
+            <p class="review-question">{{ item.question }}</p>
+            <div class="review-answers">
+                <p class="review-selected">
+                    Your answer:
+                    <strong>{{ item.options.get(item.selected, 'No answer selected') }}</strong>
+                </p>
+                {% if not item.is_correct %}
+                <p class="review-correct">
+                    Correct answer: <strong>{{ item.options[item.correct] }}</strong>
+                </p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="result-actions">
+        <a href="{{ url_for('quiz.start_quiz') }}" class="btn btn--primary btn--large">Try Again</a>
+        {% if session.get('user_id') %}
+            <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn--outline btn--large">View Dashboard</a>
+        {% endif %}
+        <a href="{{ url_for('main.index') }}" class="btn btn--outline btn--large">Home</a>
+    </div>
+</div>
+{% endblock %}

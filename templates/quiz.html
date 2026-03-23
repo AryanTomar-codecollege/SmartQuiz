@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Quiz - SmartQuiz{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <div class="quiz-header">
+        <div class="quiz-progress">
+            <span class="quiz-counter">Question {{ question_number }} / {{ total_questions }}</span>
+            <div class="difficulty-badge difficulty--{{ question.difficulty }}">
+                {{ question.difficulty | upper }}
+            </div>
+        </div>
+        <div class="timer" id="timer">
+            <span id="timer-display">--:--</span>
+        </div>
+    </div>
+
+    <div class="progress-bar">
+        <div class="progress-fill" style="width: {{ (question_number / total_questions) * 100 }}%"></div>
+    </div>
+
+    <div class="question-card">
+        <h2 class="question-text">{{ question.question }}</h2>
+
+        <form action="{{ url_for('quiz.submit_answer') }}" method="POST" id="quiz-form">
+            <input type="hidden" name="question_id" value="{{ question.id }}">
+
+            <div class="options-grid">
+                <label class="option-card" for="opt-a">
+                    <input type="radio" name="selected_ans" id="opt-a" value="a" required>
+                    <span class="option-label">A</span>
+                    <span class="option-text">{{ question.option_a }}</span>
+                </label>
+
+                <label class="option-card" for="opt-b">
+                    <input type="radio" name="selected_ans" id="opt-b" value="b">
+                    <span class="option-label">B</span>
+                    <span class="option-text">{{ question.option_b }}</span>
+                </label>
+
+                <label class="option-card" for="opt-c">
+                    <input type="radio" name="selected_ans" id="opt-c" value="c">
+                    <span class="option-label">C</span>
+                    <span class="option-text">{{ question.option_c }}</span>
+                </label>
+
+                <label class="option-card" for="opt-d">
+                    <input type="radio" name="selected_ans" id="opt-d" value="d">
+                    <span class="option-label">D</span>
+                    <span class="option-text">{{ question.option_d }}</span>
+                </label>
+            </div>
+
+            <div class="quiz-actions">
+                <button type="submit" class="btn btn--primary btn--large btn--flex" id="submit-btn">
+                    {% if question_number == total_questions %}
+                        Finish Quiz
+                    {% else %}
+                        Next Question
+                    {% endif %}
+                </button>
+                <a href="{{ url_for('quiz.end_quiz') }}" class="btn btn--outline btn--large btn--flex btn--danger" onclick="return confirm('Are you sure? This quiz will not be saved.')">
+                    End Test
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/timer.js') }}"></script>
+<script>
+    startTimer({{ quiz_time }}, document.getElementById('timer-display'), document.getElementById('quiz-form'));
+</script>
+{% endblock %}

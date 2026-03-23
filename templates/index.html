@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}SmartQuiz - Adaptive Quiz System{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">
+            Test Your Knowledge<br>
+            <span class="hero-highlight">Intelligently</span>
+        </h1>
+        <p class="hero-subtitle">
+            Our adaptive quiz engine adjusts difficulty in real time based on your performance.
+            Easy <-> Medium <-> Hard. The better you perform, the tougher the next question becomes.
+        </p>
+        <div class="hero-actions">
+            {% if session.get('user_id') %}
+                <a href="{{ url_for('quiz.start_quiz') }}" class="btn btn--primary btn--large">Start Quiz</a>
+                <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn--outline btn--large">My Dashboard</a>
+            {% else %}
+                <a href="{{ url_for('auth.signup') }}" class="btn btn--primary btn--large">Get Started</a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn--outline btn--large">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="features">
+        <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🧠</div>
+            <h3>Adaptive Difficulty</h3>
+            <p>Questions get harder when you're right and easier when you're wrong using a simple rule-based engine.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⏱️</div>
+            <h3>Timed Challenges</h3>
+            <p>Race against the clock and complete the quiz before time runs out.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Track Progress</h3>
+            <p>View your quiz history, scores, and performance trends on your dashboard.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
