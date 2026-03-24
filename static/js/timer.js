@@ -28,7 +28,7 @@ function startTimer(durationSeconds, displayElement, formElement) {
         if (timeRemaining <= 0) {
             clearInterval(interval);
             displayElement.textContent = "00:00";
-            formElement.submit();
+            window.location.href = formElement.dataset.timeoutUrl || formElement.action;
         } else {
             updateDisplay();
         }

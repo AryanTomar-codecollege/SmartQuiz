@@ -43,7 +43,13 @@
                     {% for attempt in attempts %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ attempt.taken_at.strftime('%b %d, %Y %I:%M %p') }}</td>
+                        <td>
+                            {% if attempt.taken_at.strftime is defined %}
+                                {{ attempt.taken_at.strftime('%b %d, %Y %I:%M %p') }}
+                            {% else %}
+                                {{ attempt.taken_at }}
+                            {% endif %}
+                        </td>
                         <td>{{ attempt.score }} / {{ attempt.total }}</td>
                         <td>
                             <div class="mini-progress">
