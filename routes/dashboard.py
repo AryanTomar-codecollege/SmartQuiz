@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from flask import Blueprint, flash, redirect, render_template, session, url_for
 
 from utils.db import query_db
@@ -23,18 +21,6 @@ def dashboard():
            ORDER BY taken_at DESC""",
         (user_id,),
     )
-
-    for attempt in attempts:
-        taken_at = attempt.get("taken_at")
-        if isinstance(taken_at, str):
-            for fmt in ("%Y-%m-%d %H:%M:%S", "%a, %d %b %Y %H:%M:%S GMT"):
-                try:
-                    attempt["taken_at"] = datetime.strptime(taken_at, fmt)
-                    break
-                except ValueError:
-                    continue
-
-        attempt["percentage"] = int(attempt.get("percentage") or 0)
 
     total_quizzes = len(attempts)
     if total_quizzes > 0:
