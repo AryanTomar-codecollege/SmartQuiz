@@ -23,11 +23,9 @@ load_env_file()
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key-for-local-development")
 
-    # MySQL database configuration
-    DB_HOST = os.environ.get("DB_HOST", "localhost")
-    DB_USER = os.environ.get("DB_USER", "root")
-    DB_PASSWORD = os.environ.get("DB_PASSWORD", "")
-    DB_NAME = os.environ.get("DB_NAME", "smart_quiz")
+    # SQLite by default, but keep this configurable so MySQL can be swapped back in later.
+    DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///quiz.db")
+    FRONTEND_ORIGINS = os.environ.get("FRONTEND_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
 
     # Quiz settings
     QUESTIONS_PER_QUIZ = int(os.environ.get("QUESTIONS_PER_QUIZ", 10))

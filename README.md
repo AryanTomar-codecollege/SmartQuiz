@@ -1,115 +1,75 @@
 # Smart Quiz
 
-Smart Quiz is a Flask + MySQL project that gives users a timed quiz with adaptive difficulty.
+Smart Quiz is now a FastAPI + React + SQLite project with the same adaptive quiz flow as the original app.
 
-## Features
+## Stack
 
-- User signup, login, and logout
-- Timed quiz with one shared countdown for the full attempt
-- Adaptive difficulty: easy -> medium -> hard based on performance
-- Dashboard showing quiz history and basic performance stats
-- Clean Flask structure using Blueprints
+- Backend: FastAPI
+- Server: Uvicorn
+- Validation: Pydantic
+- Database: SQLite with SQLAlchemy
+- Frontend: React
 
-## Tech Stack
-
-- Python
-- Flask
-- MySQL
-- HTML, CSS, JavaScript
-- Jinja2 templates
-
-## Project Structure
+## Project Layout
 
 ```text
 quiz web/
 |-- app.py
+|-- backend/
+|   |-- main.py
+|   |-- db.py
+|   |-- schemas.py
+|   `-- seed_data.py
+|-- frontend/
+|   |-- index.html
+|   |-- package.json
+|   `-- src/
+|       |-- App.jsx
+|       |-- api.js
+|       |-- main.jsx
+|       `-- styles.css
 |-- config.py
 |-- requirements.txt
 |-- schema.sql
-|-- seed.sql
-|-- routes/
-|   |-- auth.py
-|   |-- dashboard.py
-|   `-- quiz.py
-|-- static/
-|   |-- css/
-|   `-- js/
-|-- templates/
-`-- utils/
-    |-- adaptive.py
-    `-- db.py
+`-- seed.sql
 ```
 
-## How the Adaptive Difficulty Works
+## Run It
 
-- The quiz starts with an easy question.
-- A correct answer moves the next question one level up.
-- A wrong answer moves the next question one level down.
-- The difficulty stays inside the range: easy, medium, hard.
-
-## Setup
-
-### 1. Create and activate a virtual environment
+### Backend
 
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
-```
-
-### 2. Install dependencies
-
-```powershell
 pip install -r requirements.txt
-```
-
-### 3. Create your environment file
-
-Copy `.env.example` to `.env` and update the password for your MySQL setup.
-
-### 4. Create the database and seed the questions
-
-Run the SQL files in MySQL:
-
-```sql
-SOURCE schema.sql;
-SOURCE seed.sql;
-```
-
-### 5. Start the app
-
-```powershell
 python app.py
 ```
 
-Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser.
+The API runs on `http://127.0.0.1:8000`.
+
+### Frontend
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+The React app runs on `http://localhost:5173` and talks to the FastAPI backend with cookies enabled.
 
 ## Environment Variables
 
-The app reads these values from `.env`:
+Copy `.env.example` to `.env` and adjust if needed:
 
 - `SECRET_KEY`
-- `DB_HOST`
-- `DB_USER`
-- `DB_PASSWORD`
-- `DB_NAME`
+- `DATABASE_URL`
+- `FRONTEND_ORIGINS`
 - `QUESTIONS_PER_QUIZ`
 - `QUIZ_TIME_SECONDS`
 
-## What This Project Shows
+## Notes
 
-- Flask application factory pattern
-- Modular routing with Blueprints
-- Session-based quiz logic
-- MySQL database integration
-- Basic full-stack web development with authentication
-
-## Future Improvements
-
-- Add automated tests
-- Add category-based quizzes
-- Add an admin page to manage questions
-- Deploy with a production-ready server
-
-## License
-
-Built for learning purpose by Aryan Tomar
+- SQLite is the default database.
+- SQLAlchemy keeps the database layer easy to swap later.
+- The backend seeds the sample questions automatically on first run if the database is empty.
+- The old Flask stack has been removed from the active project.
